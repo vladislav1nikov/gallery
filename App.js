@@ -1,13 +1,18 @@
-import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
-import { PhotoPage } from './src/components/PhotoPage.js';
-import { Gallery } from './src/components/Gallery.js';
+import React, { Component } from 'react';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import { reducer } from './src/reducers/reducer.js';
+import Navigation from './src/navigation.js';
 
-const AppNavigator = createStackNavigator({
-  Gallery: {screen: Gallery},
-  Page: {screen: PhotoPage}
-});
+const store = createStore(reducer, applyMiddleware(thunk));
 
-const App = createAppContainer(AppNavigator);
-
-export default App;
+export default class App extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <Navigation />
+      </Provider>
+    );
+  }
+}

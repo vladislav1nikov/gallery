@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Image } from 'react-native';
 
-export class PhotoPage extends Component {
+export default class PhotoPage extends Component {
     static navigationOptions = {
         title: 'Photo'
     };

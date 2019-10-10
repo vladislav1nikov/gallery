@@ -9,17 +9,18 @@ export const stylesGallery = StyleSheet.create({
         flexWrap: 'wrap',
         width: '100%',
         marginBottom: 5,
-        backgroundColor: '#4385f5'
+        backgroundColor: '#e4eaf4'
     },
     activityIndicatorView: {
         flex: 1,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        backgroundColor: '#e4eaf4'
     },
     errorView: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#4385f5'
+        backgroundColor: '#e4eaf4'
     },
     error: {
         color: 'red',

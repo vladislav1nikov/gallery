@@ -1,58 +1,58 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { View, ScrollView, ActivityIndicator, Text } from 'react-native';
-import { toJson } from 'unsplash-js/native';
-import { Photo } from '../view/javascript/Photo.js';
-import { unsplash } from '../config/config.js';
-import { PhotoCard } from '../components/PhotoCard.js';
+import PhotoCard from '../components/PhotoCard.js';
 import { stylesGallery } from '../view/css/stylesGallery.js';
+import { getImages } from '../actions/actions.js';
 
-export class Gallery extends Component {
+class Gallery extends Component {
     static navigationOptions = {
         title: 'Gallery'
     };
-    constructor(props) {
-        super(props);
-        this.state = {images: null, error: null, isUploaded: false};
-    }
     componentDidMount() {
-        let images = [];
-        unsplash.photos.listPhotos(1, 24)
-        .then(toJson)
-        .then(
-            result => {
-                result.map(item => {
-                    images.push(new Photo(item.id, item.user.name, item.links.download));
-                });
-                this.setState({images, isUploaded: true});
-            },
-            error => this.setState({error: error.message})
-        );
+        this.props.getImages(1, 24);
     }
     render() {
-        if (this.state.isUploaded){
-            return (
-                <ScrollView>
-                    <View style = {stylesGallery.view}>
-                    {this.state.images.map(image => {
-                        return <PhotoCard name={image.name} author={image.author} link={image.link} navigation={this.props.navigation} />
-                    })}
-                    </View>
-                </ScrollView>
-            );
-        }
-        else if (this.state.error) {
-            return(
-                <View style={stylesGallery.errorView}>
-                    <Text style={stylesGallery.error}>Sorry! {this.state.error}. Try again.</Text>
-                </View>
-            );
-        }
-        else {
+        if (this.props.isLoading){
             return(
                 <View style={stylesGallery.activityIndicatorView}>
                     <ActivityIndicator size="large" color="blue"/>
                 </View>
             );
         }
+        else if (this.props.images) {
+            return (
+                <ScrollView>
+                    <View style = {stylesGallery.view}>
+                    {this.props.images.map(image => {
+                        return <PhotoCard name={image.name} author={image.author} link={image.link} navigation={this.props.navigation} />
+                    })}
+                    </View>
+                </ScrollView>
+            );
+        }
+        else {
+            return(
+                <View style={stylesGallery.errorView}>
+                    <Text style={stylesGallery.error}>Sorry! An error had occured. Try again.</Text>
+                </View>
+            );
+        }
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        images: state.images,
+        isError: state.isError,
+        isLoading: state.isLoading
+    };
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getImages: (page, per_page) => dispatch(getImages(page, per_page))
+    };
+};
+   
+export default connect(mapStateToProps, mapDispatchToProps)(Gallery);

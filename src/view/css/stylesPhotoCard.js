@@ -6,7 +6,7 @@ export const stylesPhotoCard = StyleSheet.create({
         marginBottom: 5,
         width: '31%',
         height: 290,
-        backgroundColor: 'white'
+        backgroundColor: '#d6ddea'
     },
     image: {
         width: '100%',
